@@ -21,9 +21,8 @@
       border-bottom: 1px solid #333;
       display: flex;
       align-items: center;
-      /* justify-content: space-between;  <-- remove this */
-      justify-content: flex-start;        /* <-- add this */
-      gap: 24px;                          /* space between title and nav */
+      justify-content: flex-start;
+      gap: 24px;
       padding: 0 12px;
       box-sizing: border-box;
     }
@@ -39,9 +38,8 @@
       display: flex;
       gap: 16px;
       font-size: 13px;
-      /* optional but nice: */
       margin-left: 8px;
-}
+    }
 
     .topbar-nav a {
       color: #ccc;
@@ -51,6 +49,11 @@
 
     .topbar-nav a:hover {
       color: #fff;
+    }
+
+    .topbar-nav a.active {
+      color: #fff;
+      font-weight: 600;
     }
 
     /* Main content area below topbar */
@@ -131,6 +134,12 @@
       box-sizing: border-box;
     }
 
+    /* Grid mode: used on the Grid tab to avoid overlap and enforce rows/cols */
+    .banner-area.grid-mode {
+      display: grid;
+      align-content: flex-start;
+    }
+
     .banner-image {
       image-rendering: pixelated;
       image-rendering: crisp-edges;
@@ -147,11 +156,12 @@
 
     /* Right: controls */
     .controls {
-      width: 240px;
+      width: 260px;
       background: #181818;
       border-left: 1px solid #333;
       padding: 10px;
       box-sizing: border-box;
+      overflow-y: auto;
     }
 
     .control-group {
@@ -219,7 +229,8 @@
   <div class="topbar">
     <div class="topbar-title">BANNER LAB</div>
     <div class="topbar-nav">
-      <a data-page="generate">Generate</a>
+      <a data-page="generate" class="active">Generate</a>
+      <a data-page="grid">Grid</a>
       <a data-page="presets">Filter Presets</a>
       <a data-page="hall">Hall of Fame</a>
     </div>
@@ -244,13 +255,37 @@
 
     <!-- Right: controls -->
     <div class="controls">
-      <div class="control-group">
-        <label for="count-input">Number of banners to generate:</label>
-        <input id="count-input" type="number" min="1" max="200" value="10">
+      <!-- Generate tab controls -->
+      <div id="controls-generate">
+        <div class="control-group">
+          <label for="count-input">Number of banners to generate:</label>
+          <input id="count-input" type="number" min="1" max="200" value="10">
+        </div>
+
+        <div class="control-group">
+          <button id="generate-button">Generate</button>
+        </div>
       </div>
 
-      <div class="control-group">
-        <button onclick="generateBanners()">Generate</button>
+      <!-- Grid tab controls -->
+      <div id="controls-grid" style="display:none;">
+        <div class="control-group">
+          <label for="grid-width-input">Grid width (columns):</label>
+          <input id="grid-width-input" type="number" min="1" max="32" value="4">
+        </div>
+        <div class="control-group">
+          <label for="grid-height-input">Grid height (rows):</label>
+          <input id="grid-height-input" type="number" min="1" max="32" value="3">
+        </div>
+        <div class="control-group">
+          <button id="generate-grid-button">Generate Grid</button>
+        </div>
+        <div class="control-group">
+          <button id="mirror-horizontal-button">Mirror Horizontally (top/bottom)</button>
+        </div>
+        <div class="control-group">
+          <button id="mirror-vertical-button">Mirror Vertically (left/right)</button>
+        </div>
       </div>
 
       <!-- Color filters -->
@@ -278,7 +313,5 @@
   </div>
 
   <script src="{{ url_for('static', filename='js/main.js') }}"></script>
-
-
 </body>
 </html>
